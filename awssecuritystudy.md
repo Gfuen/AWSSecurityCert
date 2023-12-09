@@ -352,7 +352,7 @@ CFN Nested Stacks
 - Explicit DENY => Explicit ALLOW => Default DENY
 - DENY ALLOW DENY
 - Inline Policies
-    - Special Allows for Denys
+    - Special Allows or Denys
 - Managed Policies 
     - Reusable
     - Customer Managed or AWS Managed
