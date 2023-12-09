@@ -3,8 +3,9 @@
 # Domain 6: Management and Security Governance
 
 ## AWS Accounts - Basics
-```
+
 * AWS Account is a container for identities(user) and Resources
+```
 -AWS Accounts require a unique email address, payment method. and account name
 -Email address can be used for multiple accounts
 -AWS Root user(* of this account) is created unique identity that can only access that specific AWS account
