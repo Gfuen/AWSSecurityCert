@@ -147,7 +147,7 @@
 ## AWS Trusted Advisor
 
 - ACCOUNT level -  no agents to install
-- 5 checks provided; Cost Optimization, Performance, Security, Fault Tolerance and Service Limits
+- Checks provided; Cost Optimization, Performance, Security, Fault Tolerance and Service Limits
 - 7 Core checks with basic & developer support plans
     - S3 Bucket Permissions -  NOT OBJECTS
     - Security Groups -  Specific Ports Unrestricted
