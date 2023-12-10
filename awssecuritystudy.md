@@ -1325,7 +1325,7 @@ communication system, application, or network or computing device
 - AWS Shield -  Advanced
     - $3k per month (per ORG), 1 year lock- in + data (OUT) /M
     - Protects CF, R53, Global Accelerator, Anything associated with EIPs (i.e EC2), ALBs, CLBs, NLBs
-    - Not automatic -  must be explicitly enabled in Shield Advanced or AWS Firewall Manager Shild Advanced Policy (Exam Question)
+    - Protections Not automatic -  must be explicitly enabled in Shield Advanced or AWS Firewall Manager Shild Advanced Policy (Exam Question)
     - Cost protection (i.e EC2 scaling) for unmitigated attacks
     - Proactive Engagement & AWS Shield Response Team (SRT)
     - WAF Integration -  includes basic AWS WAF fees for web ACLs, rules, and web requests
