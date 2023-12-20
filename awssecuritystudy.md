@@ -103,6 +103,7 @@
 - Config Rules, AWS Managed or Custom rules, evaluate resources against a defined standard (Compliant vs Non- Compliant)
 - Config Rules can invoke Lambda functions or SSM to change configurations
 - Can add remediation actions that automatically run SSM runbooks
+- Can configure Multi-Account Multi-Region Data Aggregator to review configurations across accounts and regions
 
 
 ## AWS Service Catalog
@@ -1608,6 +1609,7 @@ communication system, application, or network or computing device
 - Management events only by default
 - IAM, STS, CloudFront => Global Service Events (logged to us- east- 1)
 - NOT REALTIME -  There is a delay
+- "--include-global-service-events" parameter in AWS command to cover global services when configuring
 
 
 ## CloudTrail Log File Integrity
@@ -1738,12 +1740,17 @@ communication system, application, or network or computing device
 - KMS Keys can be used for up to 4KB of data
 - KMS and KMS Keys
 - Data Encryption Keys (DEKs)
-    - GenerateDataKey -  works on > 4KB
+    - GenerateDataKey -  works on > 4KB 
     - Plaintext Version
     - Ciphertext Version
     - Encrypt data using plaintext key
     - Discard
     - Store encrypted key with data
+- API Operations
+    - GenerateDataKey - returns a plaintext copy of the data key along with copy of the encrypted data key
+    - GenerateDataKeyWithoutPlaintext - returns encrypted copy of the data key
+    - Encrypt - encrypts palintext into ciphertext
+    - Decrypt - Decrypts ciphertext that was encrypted by a KMS key
 - KMS Keys are isolated to a region & never leave ...
 - ... Multi- region keys discussed (if required) in a different video
 - ... AWS Owned & Customer Owned
@@ -2002,6 +2009,8 @@ communication system, application, or network or computing device
 - Usable via Console, CLI, API or SDKs (integration)
 - Supports automatic rotation .. this uses lambda
 - Directly integrates with some AWS products (.. RDS)
+- Enabling rotation in AWS Secrets Manager cuases the secret to rotate immediately
+- Questions mention cost or auditable it might AWS Systems Manager Parameter Store
 
 
 ## RDS Encryption & IAM Authentication
