@@ -501,6 +501,10 @@ IAM Role with External ID
     - "Condition": {"StringEquals": {"sts:ExternalId": "1337"}}
 - External IDs are an effective way of solving confused deputy attacks
 
+## Cloud Directory
+
+- Generic directory service - not Active Directory. Could be used for user/device management.
+- Encrypted at rest and in transit
 
 ## Directory Service -  Microsoft AD
 
@@ -510,15 +514,20 @@ IAM Role with External ID
 - Supports Schema extension -  MS AD Aware Apps
 - Sharepoint, SQL, Distributed File System (DFS)
 - Two sizes -  Standard (30,000) & Enterprise (500,000)
-- Used for AD Authentication/Authorization of products and services within AWS
-- Highly- Available by default (2AZ+)
-- Includes monitoring, recovery, replication, snapshots and maintenance -  configurable;managed by AWS
 - Supports one- way and two- way external and forest trusts with on- premises active directory
 - Directory in AWS -  can operate through a network link failure to any connected on- premises systems
 - Supports RADIUS- based MFA
-- Best choice for more than 5,000 users and if you need trust relationships between AWS and your on- premises directories
-- Microsoft AD is the only directory service type which supports AD Native schema extensions. These are required by some AD applications.
-- Identity Federation with other cloud platforms & applications such as Azure AD or Microsoft 365
+- Can assign IAM roles to AD users for AWS access
+- Managed Microsoft AD
+    - Can join to existing AD with trust relationships
+    - Or replace an on-prem AD by using Direct Connect or VPN
+    - EBS volumes are encrypted. Deployed on two AZs. Daily backups.
+    - Some high-priv operations not available. No remote access or powershell access. You get an OU and delegated admin account for it.
+-AD Connector
+    - Proxy for a specific list of AWS services through to on-prem AD.
+    - Notably works with: SSO; management console; EC2 Windows (join domain)
+- Simple AD
+    - Samba backend. Like Managed Microsoft AD but less features and smaller resource limits.
 
 
 ## Identity Federation
@@ -700,12 +709,15 @@ communication system, application, or network or computing device
 
 ## Amazon GuardDuty (Threat Detection)
 
-- Continous security monitoring service
+- Uses CloudTrail, VPC Flow Logs, and DNS Logs (if EC2 instances are configured to use Route 53 resolvers - the default). Doesn't require you to enable them!
+-  Continous security monitoring service
 - Analyses supported Data Sources
 - ..plus AI/ML, plus threat intelligence feeds
 - Identifies unexpected and unauthorized activity
 - ..notify or event- driven protection/remediation
 - Supports multiple accounts (MASTER and MEMBER)
+- Findings -> GuardDuty console (for 90 days) + CloudWatch Events. Findings in JSON format similar to Macie & Inspector
+- CloudWatch events -> SNS topic (-> email) / Lambda (->S3)
 
 
 ## AWS Security Hub
@@ -722,6 +734,9 @@ communication system, application, or network or computing device
 - Aggregates data from Partner & AWS services (Config, Macie, Inspector, GuardDuty, IAM, Firewall Manager)
 - AWS Security Findings Format (ASFF)
 
+## AWS Firewall Manager
+
+- Centrally manage WAF rules across CloudFront and ELB Application Load Balancers via Organizations
 
 ## Amazon Detective
 
@@ -1188,15 +1203,11 @@ communication system, application, or network or computing device
 
 ## AWS Certificate Manager (ACM)
 
-- HTTP -  Simple and Insecure
-- HTTPS -  SSL/TLS Layer of Encryption added to HTTP
-- Data is encrypted in- transit
-- Certificates prove identity
-- Chain of trust -  Signed by a trusted authority
+- Issuance can take a few hours
+- Email or DNS validation (CloudFormation only supports email validation)
+- Validates DNS CA Authorization records first
 - ACM lets you run a public or private Certificate Authority (CA)
-- Private CA -  Applications need to trust your private CA
-- Public CA -  Browsers trust a list of providers, which can trust other providers
-- ACM can generate or import Certificates
+- ACM can generate or import Certificates (private or public certs)
 - If generated ... it can automatically renew
 - If imported .. you are responsible for renewal
 - Certificates can be deployed out to supported services
@@ -1206,6 +1217,11 @@ communication system, application, or network or computing device
 - To use a cert with an ALB in ap- southeast- 2 you need a cert in ACM in ap- southeast- 2
 - Global Services such as CloudFront operate as though within 'us- east- 1'
 - For CloudFront think of the distribution in us- east- 1. The cert is deployed by ACM to the distribution -  then the distribution sends to the edge locations
+- If ACM is not available use AWS CLI to upload 3rd party certificate to IAM certificate store
+- Private keys are KMS protected - CloudTrail shows services using KMS to get the keys
+- Private CA
+      - Allows export of the private key, whereas public standard only integrates with AWS services
+  
 
 
 ## CloudFront and SSL
@@ -1704,14 +1720,7 @@ communication system, application, or network or computing device
 
 ## AWS Artifact
 
-- Self- service Portal
-- Access to AWS Compliance Reports
-- ... and review/access agreements with AWS
-- ISO, PCI, FedRAMP, SOC
-- ... used within formal due- dilligence or audit processes
-- Generally you can share these withy your customers
-- On- demand ... !!!
-
+- Generic AWS compliance docs
 
 # Domain 5 Data Protection
 
@@ -1767,11 +1776,10 @@ communication system, application, or network or computing device
 
 ## CloudHSM
 
-- With KMS ... AWS Manage ... Shared but separated
-- True "Single Tenant" Hardware Security Module (HSM)
-- AWS provisioned ... fully customer managed
-- Fully FIPS 140- 2 Level 3 (KMS is L2 Overall, some L3 Complaint)
-- Industry Standard APIs -  PKCS#11, Java Cryptography Extensions (JCE), Microsoft CryptoNG (CNG) libraries
+- Advertised as only suitable when you have contractual/regulatory constraints.
+- Only option for SQL Server and Oracle transparent database encryption (but not AWS RDS Oracle! only instances running on EC2. RDS Oracle only works with CloudHSM Classic). Also works with Redshift.
+- PKCS#11, JCE, CNG
+- FIPS 140-2 Level 3 certified
 - KMS can use CloudHSM as a custom key store, CloudHSM integration with KMS
 - HSMs keep keys and policies in sync when nodes are added or removed
 - HSMs operate in an AWS managed HSM VPC Interfaces are added to customer VPC
