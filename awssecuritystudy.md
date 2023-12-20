@@ -108,18 +108,10 @@
 
 ## AWS Service Catalog
 
-- Document or Database created by an IT Team 
-- Organized collection of products
-- Offered by the IT Team
-- Key Product Information: Product Owner, Cost, Requirements, Support Information, Dependencies
-- Defines approval of provisioning from IT and Customer side
-- Manage costs and scale service delivery
-- Self- service Portal for 'end users'
-- ..launch predefined (by admin) products
-- End user permissions can be controlled
-- Admins can define those products
-- ..and the permissions reqiured to launch them
-- Build products into portfolios
+- Portfolio: collection of catalogs. Catalogs: collection of products. Product: CloudFormation template (with the usual optional CloudFormation parameters).
+- Portfolios can be shared across accounts.
+- Admin access control is via IAM. User access control is initially via IAM - You need ServiceCatalogEndUserAccess to use Service Catalog. It doesn't support resource-level permissions nor resource-based policies, which -is weird. Portfolio access is instead managed within Service Catalog by associating IAM users/groups/roles with a Portfolio.
+- Launch role: a role that is used to run the templates, instead of the user having the necessary permissions. Don't think the user needs iam:PassRole to use it - so a way of constraining user of the permissions in the role.
 
 
 ## AWS Resource Access Manager (RAM)
@@ -392,6 +384,10 @@ CFN Nested Stacks
 
 ## IAM Roles
 
+- Roles for EC2 instances
+      - creds found in http://169.254.169.254/latest/meta-data/iam/security-credentials/<role / instance profile name>
+      - To launch an instance, users need iam:PassRole for the relevant roles.
+      - Can be attached at luanch or later
 - IAM Roles are assumed .. you become that role
 - Ideal scenario is if multiple or unknown principals need to assume an AWS identity
 - 2 types of policies; Trust Policy and Permissions Policy
@@ -440,6 +436,7 @@ CFN Nested Stacks
 - Exipiration -  Date and Time of credential expiration
 - SecretAccessKey -  Used to sign requests
 - SessionToken -  Unique token which must be passed with all requests
+- You can use AssumeRoleWithWebidentity as a less-featured alternative to Cognito w/ your users
 
 
 ## EC2 Instance Roles & Profile
@@ -466,6 +463,8 @@ to access AWS resources on your behalf
 - StringNotEquals -  matches any string not listed
 - "aws:RequestedRegion" -  resolve to region of resource trying to interact with
 - "Condition": {"StringLike": {"s3:prefix": ["${aws:PrincipalTag/team}/*"]}} -  Matches Condition for Team name with "team" principal tag value
+- aws:PrincipalOrgID - instead of listing lots of accounts, just use the Org. In resource policies - Principal:*, then this condition
+- aws:source{Vpc,Vpce (endpoint),Account,Arn,Ip}
 
 
 ## IAM Policy Evaluation Logic
@@ -573,15 +572,23 @@ IAM Role with External ID
 
 ## AWS Single Sign- On (SSO)
 
-- Manage SSO Access -  AWS Accounts and External Applications
-- Flexible Identity Source
-- AWS SSO -  Built- In Identity Store
-- AWS Managed Microsoft AD
-- On- premises Microsoft AD (Two way trust or AD Connector)
-- External Identity Provider -  SAML 2.0
-- Preferred by AWS vs traditional 'workforce' identity federation
-- AWS SSO Integrates with a range of workplace Identity Sources ranging from built- in AWS SSO identities through to self- managed on- premises Active directory
-- SSO is the AWS Preferred workplace identity solution -  it handles SSO & permissions for AWS accounts and external applications such as slack and dropbox
+- Free
+- Primary use case: manage multi-account access with Organizations.
+- Additional use case: SSO to other applications via SAML 2 (custom or a bunch of built-in integrations)
+- IAM identity provider created in member accounts for SSO. Also service-linked roles created to allow SSO to manage Roles
+- Sign-ins logged to CloudTrail
+- Directories
+    - Native directory - default. Create users & groups within SSO
+    - AWS Directory Service - Managed AD & AD Connector (not simple AD)
+    - Only a single directory can be connected
+- Permissions sets
+    - collections of policies.
+    - Implemented as Roles in member accounts.
+    - Limit of 20 per account.
+- Ref 10 AWS managed policies, or use an inline policy
+- Control access by mapping users/groups (from the attached directory) to permissions sets & accounts. This data is held in SSO, not the directory.
+- No API!
+- For CLI access, SSO user portal gives you temporary creds for the Roles you have access to
 
 
 ## AWS PreSigned URLs
@@ -722,16 +729,13 @@ communication system, application, or network or computing device
 
 ## AWS Security Hub
 
-- Single location for security management and remediation
-- Regional service .. full compliance enable in all regions
-- Console UI and Security Hub API
-- NOT RETROACTIVE -  wroks from enable point onwards...
-- Readiness scores/findings against security standards
-- CIS AWS Foundations, PCI DSS, AWS Foundational Security Best Practices
+- Regional - findings don't cross regions
+- Multi-account support
+- Findings from Guard Duty, Inspector, Macie, third party, and self-generated against CIS standards
+- Insights: collections / filters of findings
+- NOT RETROACTIVE -  works from enable point onwards...
 - Automated remediation using EventBridge
 - Administrator & Member Accounts (independent of ORG mgmt/member)
-- Aggregation Region & Linked Regions
-- Aggregates data from Partner & AWS services (Config, Macie, Inspector, GuardDuty, IAM, Firewall Manager)
 - AWS Security Findings Format (ASFF)
 
 ## AWS Firewall Manager
@@ -763,6 +767,19 @@ communication system, application, or network or computing device
 
 
 # Domain 3: Infrastructure Security
+
+## Elastic Container Registry
+
+- IAM access control for pulling & pushing images - identity & resource based
+- Repository policies - e.g. to allow other accounts to pull
+- Images encrypted at rest by default with S3 SSE; HTTPS access
+
+## Elastic Beanstalk
+
+- Management wrapper around EC2, S3, EBS, RDS
+- Publicly available by default - configure to use a VPC to limit access
+- Beanstalk service role to manage other services. Instance profile - role used by instances to get the app, write logs, etc
+- Logs stored locally, can be configured to use CloudWatch Logs
 
 ## Public and Private AWS Services
 
@@ -1461,6 +1478,9 @@ communication system, application, or network or computing device
     - Realtime -  Lambda or Kinesis Data stream (KCL consumers)
     - Elasticsearch -  AWS Managed Lambda
     - Metric Filter ... scan log data, generate a CloudWatch Metric
+- CloudWatch Log Insights
+    - Limited query language for analysis and visualization of data in CloudWatch Logs
+    - Much more powerful than the native CloudWatch Logs interface
 
 
 ## CloudWatch Events and EventBridge
@@ -1485,6 +1505,7 @@ communication system, application, or network or computing device
 - EventBridge is an alternative and supports more types of events and more services
 
 
+
 ## SNS Architecture
 
 - Public AWS Service -  network connectivity with Public Endpoint
@@ -1501,6 +1522,13 @@ communication system, application, or network or computing device
 - Server Side Encryption (SSE)
 - Cross- Account via TOPIC Policy
 
+## SQS
+
+- Polling, vs SNS's push mechanism
+- Standard queues might reorder messages or deliver them multiple times
+- Can subscribe to SNS topics
+- Can trigger Lambda functions on message receipt
+- Uses KMS for optional encryption
 
 ## Amazon Inspector
 
@@ -1522,6 +1550,35 @@ communication system, application, or network or computing device
 - Center for Internet Security (CIS) Benchmarks
 - Security best practices for Amazon Inspector
 
+## AWS Systems Manager (SSM)
+
+-Group resources of different types together based on a query, e.g. an application.
+-Many features require the Agent installed - many AWS AMIs include it by default. EC2 instances need an instance profile for a role that has the necessary permissions to allow the agent to interact with SSM.
+-Insights dashboard - per resource group
+    -Shows CloudTrail, Config, software inventory, and patch compliance
+    -Can integrate CloudWatch dashboards, Trusted Advisor notificaitons, Personal Health Dashboard
+-Potentially useful for understanding baseline usage patterns to contrast with during an incident
+-Inventory - applications, files, network configurations, Windows services, registries, more
+-Automation
+    -documents of tasks to run; scheduled, triggered, or manually launched
+    -Approval feature - configure approvals required (via the console) before it continues
+    -Documents can have roles, and users can have permission to run documents - nice restriction of privileges to particular tasks
+-Run command
+    -Sometimes called EC2 run command
+    -Logs via CloudTrail
+    -Can be triggered by CloudWatch Events
+-Session Manager - browser based shell w/ IAM & CloudTrail
+    -Can log session data to S3 and/or CloudWatch Logs
+-Patch Manager
+-State Manager - specify OS configuration, rollout schedule, compliance reporting
+-Parameter store
+    -Can be tagged + organized in a hierarchy.
+    -KMS for encryption - users need KMS permissions to use the corresponding CMK (can restrict using a condition on kms:EncryptionContext to just particular parameters)
+    -IAM resource per-parameter
+    -10k params per account
+-Patch Manager and State Manager can operate on on-prem instances too
+-Lots of resources, no resource-based policies
+-The CloudWatch Agent can send SSM actions on the host to CloudWatch Logs
 
 ## AWS Trusted Advisor
 
@@ -1607,7 +1664,7 @@ communication system, application, or network or computing device
 - Intelligent Threat Mitigation
 - Bot Control -  ($10/month) & ($1/1 million requests*)
 - Captcha -  ($0.40/1,000 challenge attempts*)
-- Fraud Control/Account Takeover ($10/month* & $1/1,000 logina attempts*)
+- Fraud Control/Account Takeover ($10/month* & $1/1,000 login attempts*)
 - Marketplace Rule Groups -  Extra costs
 
 
@@ -1647,25 +1704,22 @@ communication system, application, or network or computing device
 
 ## AWS Athena
 
-- Serverless Interactive Querying Service
-- Ad- hoc queries on data -  pay only data consumed
-- Schema- on- read -  table- like translation
-- Original data never changed -  remains on S3
-- Schema translated data => relational- like when read
-- Output can be sent to other services
-- Supports standard formats of structured, semi- structured and unstructured data. Source data is stored on S3
-- Athena can directly read many AWS data formats such as CloudTrail, ELB Logs and Flow Logs
-- Data on S3 is FIXED
-- "Tables" are defined in advance in a data catalog and data is projected through when read. It allows SQL- like queries on data without transforming source data
-- Output can be sent to visualization tools
-- Billed based on data consumed during query
-- Queries where loading/transformation isnt desired
-- Occassional/Ad- hoc queries on data in S3
-- Serverless querying scenarios -  cost conscious
-- Querying AWS logs -  VPC Flow Logs, CloudTrail, ELB logs, cost reports etc ...
-- AWS Glue Data Catalog & Web Server Logs
-- w/ Athena Federated Query ... other data sources
+- SQL queries over data in S3 after you define a schema. Including (optionally compressed) JSON & CSV
+- Integrates with Glue's Data Catalog - a more featureful version of Athena's built in Data Catalog which supports fine-grained permissions.
+- Charged per query (volume of data scanned)
+- Security model uses both athena:* permissions for queries and data models, and then the underlying S3 permissions
+- Can query encrypted data that uses S3 or KMS managed keys. Can encrypt results.
+- Athena is better than Redshift for querying smaller datasets without pre-processing.
+- CloudTrail can automatically create Athena tables for you, and AWS are keen to push Athena as an ideal CloudTrail analysis tool. Other good candidates: VPC flow logs (if sent to S3), CloudFront, ELB.
 
+## Elasticsearch Service
+
+- IAM auth for management, ES APIs, and resource-based policies down to index level
+- Resource based policies can allow specific IP addresses
+- Kibana auth via Cognito
+- Can configure public or VPC endpoints
+- Ingress via Kinesis Firehose, Logstash, or ES's index/bulk APIs
+- KMS integration for data at rest
 
 ## Amazon Macie 
 
@@ -1701,22 +1755,20 @@ communication system, application, or network or computing device
 
 ## AWS Glue 101
 
-- Serverless ETL (Extract, Transform & Load)
-- ... vs datapipeline (which can do ETL) and uses servers (EMR)
-- Moves and transforms data between source and destination
-- Crawls data sources and generates the AWS Glue Data catalog
-- Data Source: Stores: S3, RDS, JDBC Compatible & DynamoDB
-- Data Source: Streams: Kinesis Data Stream & Apache Kafka
-- Data Targets: S4, RDS, JDBC Databases
-- AWS Glue -  Data Catalog
-    - Persistent metadata about data sources in region
-    - One catalog per region per account
-    - Avoids data silos ...
-    - Amazon Athena, Redshift Spectrum, EMR & AWS Lake Formation all use Data Catalog
-    - ... configure crawlers for data sources
-- Crawlers connect to data stores, determine schema and create metadata in the data catalog
-- Glue jobs can be initiated manually or via events using EventBridge
+- "Select a data source and data target. AWS Glue will generate ETL code in Scala or Python to Extract data from the source, Transform the data to match the target schema, and Load it into the target. "
+- Sources: S3, Redshift, and RDS and other databases
+- Loading into other services for querying (e.g. Athena, Redshift)
 
+## AWS Kinesis
+
+-Ingest and analyse various data sources, notably logs
+-Data Firehose
+    -"capture, transform, and load streaming data into Amazon S3, Amazon Redshift, Amazon Elasticsearch Service, and Splunk"
+    -Create delivery stream, with optional Lambda function to transform the data
+    -Configure producers to send data to Kinesis with the Kinesis Agent (which monitors log files) or Firehose API
+    -Source integrations: CloudWatch Logs subscription filter; CloudWatch Events rule with Firehose target; Kinesis Data Streams.
+    -Configure an IAM role that it assumes to access e.g. S3 or Elasticsearch
+    -Manage delivery frequency with buffer size or interval
 
 ## AWS Artifact
 
