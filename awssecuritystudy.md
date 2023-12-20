@@ -102,6 +102,7 @@
 - Changes can generate SNS notifications and near- realtime events via EventBridge & Lambda
 - Config Rules, AWS Managed or Custom rules, evaluate resources against a defined standard (Compliant vs Non- Compliant)
 - Config Rules can invoke Lambda functions or SSM to change configurations
+- Can add remediation actions that automatically run SSM runbooks
 
 
 ## AWS Service Catalog
@@ -632,6 +633,10 @@ IAM Role with External ID
     - NO Deletes or Changes until removed
     - s3:PutObjectLegalHold is required to add or remove
     - Prevent accidental deletion of critical object versions
+- Vault lock policy can be locked to prevent future changes in AWS S3 Glacier to deploy regulatory and compliance controls
+- Steps to lock a vault
+    - 1. Initiate the lock by attaching a vault lock policy to your vault which sets lock to in-progress state and returns a lock ID. While in the in-progress state, you have 24 hrs to validate vault lock policy before the lock ID expires. (initiatie-vault-lock API to start)
+    - 2. Use the lock ID to complete the lock process. If the vault lock policy doesnt work as expected you can abort the lock and restart from the beginning. (abort-vault-lock API to abort)
 
 
 ## S3 Versioning & MFA
