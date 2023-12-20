@@ -1481,6 +1481,8 @@ communication system, application, or network or computing device
 - CloudWatch Log Insights
     - Limited query language for analysis and visualization of data in CloudWatch Logs
     - Much more powerful than the native CloudWatch Logs interface
+- CloudWatch Log Agent
+    - CloudWatch Logs Agent "awslogs" connects to the CloudWatch Logs API endpoint
 
 
 ## CloudWatch Events and EventBridge
