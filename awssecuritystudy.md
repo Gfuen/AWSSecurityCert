@@ -1863,10 +1863,7 @@ communication system, application, or network or computing device
 - KEK = Asymmetric or Symmetric (w/KMS)
 - DEK = Symmetric
 - Decryption Flow
-    - Request is made to "unwrap" or "decrypt" the DEK
-    - If ALLOWED, plaintext DEK is returned from Key Management Service
-    - Plaintext DEK decrypts cipher text and is then discarded
-    - Decrypting with a symmetric key is faster. Less data (the DEK only) is transferred to KMS
+    - It is a process where you encrypt plaintext data with a data key and then encrypt the data key with a top-level encrypted master key.
 - Asymmetric keys are flexible (public part is ... public)
 - ... but they're slow
 - Symmetric keys are fast ... but difficult to securely move
