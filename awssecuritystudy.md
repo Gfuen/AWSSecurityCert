@@ -1851,8 +1851,8 @@ communication system, application, or network or computing device
 - Client- Side Encryption (S3 never sees plaintext)
 - Server- Side Encryption
     - Server- Side Encryption with Customer- Provided Keys (SSE- C)
-    - Server- Side Encryption with Amazon S3- Managed Keys (SSE- S3 No KEY Control No Role Separation) (this is the default AES- 256) (shows audit trail others dont)
-    - Server- Side Encryption with KMS KEYS Stored in AWS Key Management Service (SSE- KMS KEY Rotation Control Role Separation)
+    - Server- Side Encryption with Amazon S3- Managed Keys (SSE- S3 No KEY Control No Role Separation) (this is the default AES- 256) 
+    - Server- Side Encryption with KMS KEYS Stored in AWS Key Management Service (SSE- KMS KEY Rotation Control Role Separation)(shows audit trail others dont)
 
 
 ## Envelope Encryption
