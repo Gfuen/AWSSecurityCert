@@ -504,6 +504,7 @@ IAM Role with External ID
 
 - Generic directory service - not Active Directory. Could be used for user/device management.
 - Encrypted at rest and in transit
+- Amazon Cloud Directory is incorrect because this is primarily for developers who need to manage large volumes of hierarchical data and need a flexible directory solution that supports multiple sets of relationships and built-in data validation.
 
 ## Directory Service -  Microsoft AD
 
