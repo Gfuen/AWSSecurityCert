@@ -1356,6 +1356,7 @@ communication system, application, or network or computing device
 - Code signing for AWS Lambda
     - Sign the code using an AWS Signer profile
     - Package the source code in a zip file and upload it to an S3 bucket
+    - Set the signer profile in the code signing option of the Lambda function
 
 ## DDOS 101
 
