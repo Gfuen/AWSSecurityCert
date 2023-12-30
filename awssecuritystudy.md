@@ -772,6 +772,7 @@ communication system, application, or network or computing device
 - ORG Management delegates an account as Detective Administrator account for the ORG
 - ..can add any ORG acccount .. option for automatic add
 - ..can also invite accounts outside of the ORG
+- Use the "From Findings" annotations to see the log entries involved in findings
 
 
 ## Revoking IAM Role Temporary Security Credentials
