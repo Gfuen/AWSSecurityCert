@@ -1251,6 +1251,7 @@ communication system, application, or network or computing device
 - Global Services such as CloudFront operate as though within 'us- east- 1'
 - For CloudFront think of the distribution in us- east- 1. The cert is deployed by ACM to the distribution -  then the distribution sends to the edge locations
 - If ACM is not available use AWS CLI to upload 3rd party certificate to IAM certificate store
+- Publishes event "ACM Certificate Approaching Expiration" when ACM cert is about to expire
 - Private keys are KMS protected - CloudTrail shows services using KMS to get the keys
 - Private CA
       - Allows export of the private key, whereas public standard only integrates with AWS services
