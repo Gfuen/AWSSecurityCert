@@ -1422,6 +1422,11 @@ communication system, application, or network or computing device
     - Domain list = domain names & protocol types
     - ... wildcards, headers(http), SNI(https)
     - IPS Rules -  Suricata compatible
+- You can use Network Firewall to monitor and protect your Amazon VPC traffic in a number of ways, including the following:
+    – Pass traffic through only from known AWS service domains or IP address endpoints, such as Amazon S3.
+    – Use custom lists of known bad domains to limit the types of domain names that your applications can access.
+    – Perform deep packet inspection on traffic entering or leaving your VPC.
+    – Use stateful protocol detection to filter protocols like HTTPS, independent of the port used.
 
 
 ## Implementing DNSSEC with Route53
