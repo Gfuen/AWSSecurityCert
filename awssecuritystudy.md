@@ -104,6 +104,9 @@
 - Config Rules can invoke Lambda functions or SSM to change configurations
 - Can add remediation actions that automatically run SSM runbooks
 - Can configure Multi-Account Multi-Region Data Aggregator to review configurations across accounts and regions
+- 2 Evaluation modes
+    - Proactive evaluation - assess resources before deployment
+    - Detective evaluation - assess resources that have been deployed already
 
 
 ## AWS Service Catalog
@@ -112,6 +115,11 @@
 - Portfolios can be shared across accounts.
 - Admin access control is via IAM. User access control is initially via IAM - You need ServiceCatalogEndUserAccess to use Service Catalog. It doesn't support resource-level permissions nor resource-based policies, which -is weird. Portfolio access is instead managed within Service Catalog by associating IAM users/groups/roles with a Portfolio.
 - Launch role: a role that is used to run the templates, instead of the user having the necessary permissions. Don't think the user needs iam:PassRole to use it - so a way of constraining user of the permissions in the role.
+- Launch constraint specifics IAM role that AWS Service Catalog assumes when an end user launches a product. Must apply a launch constraint to each product individually.
+- Template constraints restrict the configuration parameters that are available for the user when launching the product
+- Different statuses of product versions
+    - Active, Inactive, Deleted
+- The AWS::CloudFormation::StackSet enables you to provision stacks into AWS accounts and across Regions by using a single CloudFormation template
 
 
 ## AWS Resource Access Manager (RAM)
@@ -331,6 +339,7 @@ CFN Nested Stacks
 - Change Sets let you preview changes (A Change Set)
 - ..multiple different versions (lots of change sets)
 - Chosen changes can be applied by executing the change set
+- Operations such as denying Update:Replace and Update:Delete or Enable Termination protection can stop accidental removal of resources
 
 
 ## CloudFormation (CFN) Custom Resources
@@ -575,10 +584,11 @@ IAM Role with External ID
 - Bidirectional Trust between Identity Provider (Saml compliant) and SAML/SSO endpoint
 
 
-## AWS Single Sign- On (SSO)
+## AWS Single Sign- On (SSO) or Identity Center
 
 - Free
 - Primary use case: manage multi-account access with Organizations.
+- Supports automatic provisioning of user and group information from your IDP into IAM Identity Center (SSO) using SCIM protocol
 - Additional use case: SSO to other applications via SAML 2 (custom or a bunch of built-in integrations)
 - IAM identity provider created in member accounts for SSO. Also service-linked roles created to allow SSO to manage Roles
 - Sign-ins logged to CloudTrail
@@ -1335,6 +1345,7 @@ communication system, application, or network or computing device
     - Migration Between S3 Origins -  Origin Request
     - Different Objects Based on Device -  Origin Request
     - Content by Country -  Origin Request
+    - Can Create function for the viewer request
 
 
 ## DDOS 101
@@ -1412,7 +1423,15 @@ communication system, application, or network or computing device
 
 ## Implementing DNSSEC with Route53
 
+- 2 kinds of keys in DNSSEC
+    - Key-signing key (KSK)
+    - Zone-signing key (ZSK)
 - ZSK Creation and Rotation handled by R53 Internally
+- KSK is based on an asymmetric customer managed key in AWS KMS, you are responsible for KSK Management which includes rotating it
+- Enable DNSSEC signing and establishing a chain of trust
+    - Step 1 Prepare for enabling DNSSEC signing
+    - Step 2 Enable DNSSEC signing and create a KSK
+    - Step 3 Establish a chain of trust
 - Create Alarms for DNSSECInternalFailure and DNSSECKeySigningKeysNeedingAction
 - DNSSEC Validation can be enabled for VPCs -  Invalid results on DNSSEC enabled zones wont be returned
 
@@ -1559,6 +1578,7 @@ communication system, application, or network or computing device
 
 ## AWS Systems Manager (SSM)
 
+- EC2RescueTool for EC2 Windows is a troubleshooting tool that can collect memory dumps
 - Group resources of different types together based on a query, e.g. an application.
 - Many features require the Agent installed - many AWS AMIs include it by default. EC2 instances need an instance profile for a role that has the necessary permissions to allow the agent to interact with SSM.
 - Insights dashboard - per resource group
@@ -1690,6 +1710,9 @@ communication system, application, or network or computing device
 - IAM, STS, CloudFront => Global Service Events (logged to us- east- 1)
 - NOT REALTIME -  There is a delay
 - "--include-global-service-events" parameter in AWS command to cover global services when configuring
+- CloudTrail Events
+    - Read-Only - Logs API operations that read your resources but dont make changes such as Encrypt, Decrypt, and GenerateDataKey
+    - Write-Only - Logs API operations that modify your resources such as Disable and Delete
 
 
 ## CloudTrail Log File Integrity
@@ -1936,6 +1959,8 @@ communication system, application, or network or computing device
 - No portability ... cant decrypt KMS ciphertext outside of AWS using the raw material
 - "Deleting" an imported Key .. deletes the key material, NOT the key or metadata
 - ... AWS can restore key & metadata but you manage the material
+- Imported Key Material
+    - Can specify an expiration data
 
 
 ## Asymmetric keys in KMS
