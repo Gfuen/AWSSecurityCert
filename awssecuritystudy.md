@@ -1431,7 +1431,7 @@ communication system, application, or network or computing device
 - Enable DNSSEC signing and establishing a chain of trust
     - Step 1 Prepare for enabling DNSSEC signing
     - Step 2 Enable DNSSEC signing and create a KSK
-    - Step 3 Establish a chain of trust
+    - Step 3 Establish a chain of trust (Done by Creating a Delegation Signer (DS) record in the parent hosted zone)
 - Create Alarms for DNSSECInternalFailure and DNSSECKeySigningKeysNeedingAction
 - DNSSEC Validation can be enabled for VPCs -  Invalid results on DNSSEC enabled zones wont be returned
 
