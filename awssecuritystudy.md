@@ -1351,6 +1351,11 @@ communication system, application, or network or computing device
     - Content by Country -  Origin Request
     - Can Create function for the viewer request
 
+## Lambda
+
+- Code signing for AWS Lambda
+    - Sign the code using an AWS Signer profile
+    - Package the source code in a zip file and upload it to an S3 bucket
 
 ## DDOS 101
 
