@@ -568,6 +568,7 @@ IAM Role with External ID
 - Unauthenticated Identities -  Guest Users
 - Federated Identities -  SWAP -  Google, Facebook, Twitter, SAML 2.0 & User Pool for short term AWS Credentials to access AWS Resources
 - Cognito assumes an IAM role defined in Identity Pool and returns temporary AWS credentials
+- Use "aws-jwt-verify library" to do signature verification on JWT from User Pools
 
 
 ## SAML Federation
