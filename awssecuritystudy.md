@@ -1958,6 +1958,7 @@ communication system, application, or network or computing device
     - Can be used cross- accoutn via Key Policy changes
     - Rotation is default about 365 days can be disabled
     - Monthly cost ... plus usage costs beyond free tier
+    - Can be disabled
 
 
 ## Importing Key Material vs Generated Key Material
