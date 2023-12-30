@@ -740,6 +740,7 @@ communication system, application, or network or computing device
 - Supports multiple accounts (MASTER and MEMBER)
 - Findings -> GuardDuty console (for 90 days) + CloudWatch Events. Findings in JSON format similar to Macie & Inspector
 - CloudWatch events -> SNS topic (-> email) / Lambda (->S3)
+- Create suppression rules for false positives
 
 
 ## AWS Security Hub
