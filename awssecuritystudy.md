@@ -1277,6 +1277,7 @@ communication system, application, or network or computing device
 - Certificate issued by a trusted certificate authority (CA) such as Comodo, DigiCert, or Symantec, or ACM (us- east- 1) MATCHES THE DNS NAME
 - Only public trusted issued certificates are able to be applied to CloudFront distributions
 - S3 Origins handle certificates natively
+- Managed SecurityHeadersPolicy to add a set of security headers to all responses that is sent to viewers
 
 
 ## CloudFront Security OAI and Custom Origins
