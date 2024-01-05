@@ -368,7 +368,7 @@ CFN Nested Stacks
 - 99% of the time IAM type to use is IAM user
 - Principal => IAM Login => Authenticated Identity
 - Amazon Resource Name (ARN) -  Uniquely identify resources within any AWS accounts
-- 5,000 IAM Users per account (possible exam question)
+- 5,000 IAM Users per account 
 - IAM User can be a member of 10 groups
 - This has systems design impacts..
 - Internet- scale applications
@@ -674,7 +674,7 @@ IAM Role with External ID
 
 ## S3 Versioning & MFA
 
-- S3 bucket can not be disabled once enabled (Exam question)
+- S3 bucket can not be disabled once enabled
 - Versioning lets you store multiple versions of objects within a bucket.
 - Operations which would modify objects generate a new version
 - Objects arent deleted -  Object deletion markers are put in place to hide objects
@@ -1128,7 +1128,7 @@ communication system, application, or network or computing device
 - For HA .. add one endpoint, to one subnet, per AZ used in the VPC
 - Network access controlled via Security Groups
 - Endpoint Policies -  restrict what can be done with the endpoint
-- TCP and IPv4 ONLY (Exam Question Possible)
+- TCP and IPv4 ONLY
 - Uses PrivateLink
 - Endpoint provides a NEW service endpoint DNS
 - e.g. vpce- 123- xyz.sns.us- east- 1.vpce.amazonaws.com
@@ -1267,7 +1267,7 @@ communication system, application, or network or computing device
 - SSL Supported by default ... *.cloudfront.net cert
 - Alternate Domain Names (CNAMES) e.g. cdn.catagram.....
 - Verify Ownership (optionally HTTPS) using a matching certificate
-- Generate or import in ACM .. in us- east- 1 (Exam question)
+- Generate or import in ACM .. in us- east- 1 
 - HTTP or HTTPS, HTTP => HTTPS, HTTPS Only
 - Two SSL Connections: Viewer => CloudFront and CloudFront => Origin
 - ... Both need valid public certificates (and intermediate certs)
@@ -1391,7 +1391,7 @@ communication system, application, or network or computing device
 - AWS Shield -  Advanced
     - $3k per month (per ORG), 1 year lock- in + data (OUT) /M
     - Protects CF, R53, Global Accelerator, Anything associated with EIPs (i.e EC2), ALBs, CLBs, NLBs
-    - Protections Not automatic -  must be explicitly enabled in Shield Advanced or AWS Firewall Manager Shild Advanced Policy (Exam Question)
+    - Protections Not automatic -  must be explicitly enabled in Shield Advanced or AWS Firewall Manager Shild Advanced Policy 
     - Cost protection (i.e EC2 scaling) for unmitigated attacks
     - Proactive Engagement & AWS Shield Response Team (SRT)
     - WAF Integration -  includes basic AWS WAF fees for web ACLs, rules, and web requests
@@ -1653,7 +1653,7 @@ communication system, application, or network or computing device
 - Attached to a VPC -  ALL ENIs in that VPC
 - .. Subnet -  ALL ENIs in that Subnet
 - .. ENIs directly
-- Flow Logs are NOT realtime (exam question)
+- Flow Logs are NOT realtime 
 - Log Destinations ... S3 or CloudWatch Logs
 - ... or Athena for querying in S3 ...
 - Flow logs capture metadata from the capture point down
@@ -2205,7 +2205,7 @@ communication system, application, or network or computing device
     - No other Layer 7 protocols (SMTP, SSH, Gaming, ...)
     - ... and NO TCP/UDP/TLS Listeners
     - L7 content type, cookies, custom headers, user location, and app behavior
-    - HTTP HTTPS always terminated on the ALB -  no unbroken SSL (security teams!) (exam question)
+    - HTTP HTTPS always terminated on the ALB -  no unbroken SSL (security teams!) 
     - ... a new connection is made to the application
     - ALBs MUST have SSL certs if HTTPS is used
     - ALBs are slower than NLB ... more levels of the network stack to process
@@ -2224,8 +2224,8 @@ communication system, application, or network or computing device
     - .. SMTP, SSH, Game Servers, financial apps (not http/s)
     - Health checks JUST check ICMP/TCP Handshake ... Not app aware
     - NLB's can have static IPs -  useful for whitelisting
-    - Forward TCP to instances .. unbroken encryption (exam)
-    - Used with private link to provide services to other VPCs (exam)
+    - Forward TCP to instances .. unbroken encryption 
+    - Used with private link to provide services to other VPCs 
 
 
 ## ELB SSL Offload and Session Stickiness
