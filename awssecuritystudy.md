@@ -1359,6 +1359,27 @@ communication system, application, or network or computing device
     - Package the source code in a zip file and upload it to an S3 bucket
     - Set the signer profile in the code signing option of the Lambda function
 
+# AWS Step Functions
+
+- AWS Step Functions are for orchestrating and managing complex, multi-step workflows involving various AWS services or custom code.
+- Use Case: AWS Step Functions, on the other hand, is used for coordinating and managing multi-step, serverless workflows involving AWS services, Lambda functions, and more. It’s more about defining the flow and logic of your application.
+- Layman Example: Think of building an e-commerce order processing system. When an order is placed, several steps need to happen in sequence: validate payment, check inventory, generate an invoice, and then notify the customer.
+
+# AWS Batch
+
+- AWS Batch is for processing a large number of independent, parallelizable tasks efficiently.
+- Use Case: AWS Batch is designed for running large-scale, parallel, and batch computing workloads, such as data processing, image rendering, and scientific simulations.
+- Layman Example: Imagine you have a huge collection of photos, and you want to apply a filter to each photo to make it look vintage. Each photo can be processed independently, and you want to do this for thousands of photos.
+
+# AWS CodeDeploy
+
+- CodeDeploy is the service that deploys your application to the existing EC2 instance(s). It does not take into account LoadBalancing or scaling etc.
+- Can be deployed to on-prem instances
+
+# AWS ElasticBeanstalk
+
+- ElasticBeanstalk is more of the PaaS service, that provides you all the wrapping you need to scale your application so you don't need to worry about the DevOps aspect. Like monitoring, scaling etc.
+
 ## DDOS 101
 
 - Attacks designed to overload websites
@@ -1760,9 +1781,9 @@ communication system, application, or network or computing device
 - Athena is better than Redshift for querying smaller datasets without pre-processing.
 - CloudTrail can automatically create Athena tables for you, and AWS are keen to push Athena as an ideal CloudTrail analysis tool. Other good candidates: VPC flow logs (if sent to S3), CloudFront, ELB.
 
-## Elasticsearch Service
+## AWS OpenSearch (Elasticsearch Service)
 
-- IAM auth for management, ES APIs, and resource-based policies down to index level
+- Amazon OpenSearch Service makes it easy for you to perform interactive log analytics, real-time application monitoring, website search, and more. OpenSearch is an open source, distributed search and analytics suite derived from Elasticsearch.
 - Resource based policies can allow specific IP addresses
 - Kibana auth via Cognito
 - Can configure public or VPC endpoints
@@ -2022,6 +2043,8 @@ communication system, application, or network or computing device
 - ... if your app uses encryption .. this will save you time
 - By default ... unique data key for every encryption
 - KMS rate limits ...
+- Data key caching can improve performacne, reduce cost, and help with service limits
+- Keyrings to perform envelope encryption
 - Encryption SDK -  Data Key Caching
     - GenerateDataKey limits (remember, 1 per encrypt)
     - 50,000 (us- east- 1, us- west- 2, eu- west- 1) shared
